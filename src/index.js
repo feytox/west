@@ -113,13 +113,13 @@ class Lad extends Dog {
     }
 
     doAfterComingIntoPlay(gameContext, continuation) {
-        this.inGameCount += 1;
-        super.doAfterComingIntoPlay(gameContext, continuation);
+       Lad.setInGameCount(Lad.getInGameCount() + 1);
+       super.doAfterComingIntoPlay(gameContext, continuation);
     }
 
     doBeforeRemoving(continuation) {
-        this.inGameCount -= 1;
-        super.doBeforeRemoving(continuation);
+       Lad.setInGameCount(Lad.getInGameCount() - 1);
+       super.doBeforeRemoving(continuation);
     }
 
     static getBonus() {
