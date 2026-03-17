@@ -28,6 +28,10 @@ function getCreatureDescription(card) {
 }
 
 class Creature extends Card {
+    constructor(name, maxPower) {
+        super(name, maxPower);
+    }
+
     getDescriptions() {
         return [getCreatureDescription(this), ...super.getDescriptions()];
     }
