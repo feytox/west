@@ -177,10 +177,17 @@ class Rogue extends Creature {
 
 const seriffStartDeck = [
     new Duck(),
-    new Duck(),
-    new Duck(),
+    new Dog(),
+    new Gatling(),
+    new Rogue(),
+    new Lad(),
+    new Lad(),
 ];
 const banditStartDeck = [
+    new Duck(),
+    new Dog(),
+    new Gatling(),
+    new Rogue(),
     new Lad(),
     new Lad(),
 ];
