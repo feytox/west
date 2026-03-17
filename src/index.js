@@ -81,9 +81,9 @@ class Gatling extends Creature {
 
     attack(gameContext, continuation) {
         const taskQueue = new TaskQueue();
-        
+
         const {currentPlayer, oppositePlayer, position, updateView} = gameContext;
-        
+
         for (let position = 0; position < oppositePlayer.table.length; position++) {
             const card = oppositePlayer.table[position];
             taskQueue.push(onDone => {
@@ -92,10 +92,57 @@ class Gatling extends Creature {
                 } else {
                     onDone();
                 }
-            });            
+            });
         }
 
         taskQueue.continueWith(continuation);
+    }
+}
+
+class Lad extends Dog {
+    constructor(name = "Браток", maxPower = 2) {
+        super(name, maxPower);
+    }
+
+    static getInGameCount() {
+        return this.inGameCount || 0;
+    }
+
+    static setInGameCount(value) {
+        this.inGameCount = value;
+    }
+
+    doAfterComingIntoPlay(gameContext, continuation) {
+        this.inGameCount += 1;
+        super.doAfterComingIntoPlay(gameContext, continuation);
+    }
+
+    doBeforeRemoving(continuation) {
+        this.inGameCount -= 1;
+        super.doBeforeRemoving(continuation);
+    }
+
+    static getBonus() {
+        let amount = this.inGameCount;
+        return amount * (amount + 1) / 2;
+    }
+
+    modifyDealedDamageToCreature(value, toCard, gameContext, continuation) {
+        let newValue = value + Lad.getBonus();
+        super.modifyDealedDamageToCreature(newValue, toCard, gameContext, continuation);
+    }
+
+    modifyTakenDamage(value, fromCard, gameContext, continuation) {
+        let newValue = value - Lad.getBonus();
+        super.modifyTakenDamage(newValue, fromCard, gameContext, continuation);
+    }
+
+    getDescriptions() {
+        if (Lad.prototype.hasOwnProperty('modifyDealedDamageToCreature')
+            && Lad.prototype.hasOwnProperty('modifyTakenDamage')) {
+            return [...super.getDescriptions(), "Чем их больше, тем они сильнее"];
+        }
+        return super.getDescriptions();
     }
 }
 
@@ -103,13 +150,10 @@ const seriffStartDeck = [
     new Duck(),
     new Duck(),
     new Duck(),
-    new Duck(),
 ];
 const banditStartDeck = [
-    new Dog(),
-    new Dog(),
-    new Dog(),
-    new Trasher(),
+    new Lad(),
+    new Lad(),
 ];
 
 
