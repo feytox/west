@@ -34,8 +34,8 @@ class Creature extends Card {
 }
 
 class Duck extends Creature {
-    constructor() {
-        super("Мирная утка", 2);
+    constructor(name = "Мирная утка", maxPower = 2) {
+        super(name, maxPower);
     }
 
     quacks() {
@@ -48,22 +48,36 @@ class Duck extends Creature {
 }
 
 class Dog extends Creature {
-    constructor() {
-        super("Пес-бандит", 3);
+    constructor(name = "Пес-бандит", maxPower = 3) {
+        super(name, maxPower);
     }
 }
 
+class Trasher extends Dog {
+    constructor(name = "Громила", maxPower = 5) {
+        super(name, maxPower);
+    }
 
-// Колода Шерифа, нижнего игрока.
+    modifyTakenDamage(value, fromCard, gameContext, continuation) {
+        let newValue = value - 1;
+        this.view.signalAbility(() => {
+            super.modifyTakenDamage(newValue, fromCard, gameContext, continuation);
+        });
+    }
+
+    getDescriptions() {
+        return [...super.getDescriptions(), "Получает на 1 меньше урона"];
+    }
+}
+
 const seriffStartDeck = [
     new Duck(),
     new Duck(),
-    new Duck()
+    new Duck(),
+    new Duck(),
 ];
-
-// Колода Бандита, верхнего игрока.
 const banditStartDeck = [
-    new Dog(),
+    new Trasher(),
 ];
 
 
